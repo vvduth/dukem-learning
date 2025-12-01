@@ -5,6 +5,7 @@ declare global {
     interface Request {
       user?: Partial<IUser>;
       userId?: string;
+      file?: Express.Multer.File;
     }
   }
 }

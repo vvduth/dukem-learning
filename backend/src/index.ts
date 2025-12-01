@@ -8,6 +8,7 @@ import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/authRoute.js"
 import helmet from "helmet";
 import morgan from "morgan";
+import documentRoutes from "./routes/documentRoute.js";
 
 // es6 module __dirname alternative
 const __filename = fileURLToPath(import.meta.url);
@@ -44,6 +45,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("API is running...");
 });
 app.use("/api/auth", authRoutes)
+app.use("/api/documents", documentRoutes);
 
 
 // 404 handler
