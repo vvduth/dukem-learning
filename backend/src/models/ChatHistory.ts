@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { IChatHistory } from "../types/index.js";
 
-const chatHistorySchema = new mongoose.Schema({
+const chatHistorySchema = new mongoose.Schema<IChatHistory>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -36,6 +37,6 @@ const chatHistorySchema = new mongoose.Schema({
 
 chatHistorySchema.index({ userId: 1, documentId: 1 });
 
-const ChatHistory = mongoose.model("ChatHistory", chatHistorySchema);
+const ChatHistory = mongoose.model<IChatHistory>("ChatHistory", chatHistorySchema);
 
 export default ChatHistory;

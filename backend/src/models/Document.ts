@@ -1,8 +1,9 @@
 
 import mongoose from "mongoose";
+import { IDocument } from "../types/index.js";
 
 
-const documentSchema = new mongoose.Schema({
+const documentSchema = new mongoose.Schema<IDocument>({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -66,6 +67,6 @@ const documentSchema = new mongoose.Schema({
 // index to optimize queries by userId and title
 documentSchema.index({ userId: 1, title: 1 });
 
-const Document = mongoose.model("Document", documentSchema);
+const Document = mongoose.model<IDocument>("Document", documentSchema);
 
 export default Document;

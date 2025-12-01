@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { IQuiz } from "../types/index.js";
 
-const quizSchema = new mongoose.Schema({
+const quizSchema = new mongoose.Schema<IQuiz>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -78,6 +79,6 @@ const quizSchema = new mongoose.Schema({
 // index for faster queries
 quizSchema.index({ userId: 1, documentId: 1 });
 
-const Quiz = mongoose.model("Quiz", quizSchema);
+const Quiz = mongoose.model<IQuiz>("Quiz", quizSchema);
 
 export default Quiz;

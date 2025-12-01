@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import { IFlashCard } from "../types/index.js";
 
 
-const flashCardSchema = new mongoose.Schema({
+const flashCardSchema = new mongoose.Schema<IFlashCard>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -48,6 +49,6 @@ const flashCardSchema = new mongoose.Schema({
 
 flashCardSchema.index({ userId: 1, documentId: 1 });
 
-const FlashCard = mongoose.model("FlashCard", flashCardSchema);
+const FlashCard = mongoose.model<IFlashCard>("FlashCard", flashCardSchema);
 
 export default FlashCard;
