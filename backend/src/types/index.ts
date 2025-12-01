@@ -10,6 +10,7 @@ export interface IUser {
   profileImage?: string | null;
   createdAt: Date;
   updatedAt: Date;
+   matchPassword?: (enteredPassword: string) => Promise<boolean>;
 }
 
 export interface IDocumentChunk {
