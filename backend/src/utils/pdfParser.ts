@@ -11,7 +11,7 @@ import {PDFParse, TextResult} from "pdf-parse";
 
 type MyTextResult = TextResult & { info: any; numPages: number };
 
-export  const  extractTextFromPDF = async (filePath: string): 
+export  const  extractFromPDF = async (filePath: string): 
 Promise<{ text: string; numPages: number, info: any }> => {
     try {
         const dataBuffer = await fs.readFile(filePath);
