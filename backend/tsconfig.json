@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    //"allowImportingTsExtensions": true,  // Uncomment this
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    // "noEmit": true,  // Uncomment this (required with allowImportingTsExtensions)
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "src/data/**/*.json", "prisma/**/*"]
+}
