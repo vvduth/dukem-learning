@@ -29,7 +29,7 @@ const documentSchema = new mongoose.Schema<IDocument>(
       type: String,
       default: "",
     },
-    chunk: [
+    chunks: [
       {
         content: {
           type: String,

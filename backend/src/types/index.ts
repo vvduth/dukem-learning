@@ -17,7 +17,7 @@ export interface IDocumentChunk {
   content: string;
   pageNumber: number;
   chunkIndex: number;
-  _id?: Types.ObjectId;
+  _id: string;
 }
 
 export interface IDocument {
@@ -28,7 +28,7 @@ export interface IDocument {
   filePath: string;
   fileSize: number;
   extractedText: string;
-  chunk: IDocumentChunk[];
+  chunks: IDocumentChunk[];
   uploadDate: Date;
   lastAccessed: Date;
   status: 'processing' | 'completed' | 'failed';

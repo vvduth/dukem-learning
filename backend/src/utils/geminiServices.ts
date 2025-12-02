@@ -108,7 +108,7 @@ export const generateQuizQuestions = async (
     options: string[];
     correctAnswer: string;
     explanation: string;
-    difficulty: string;
+    difficulty: DifficultyLevel;
   }>
 > => {
   const prompt = `Generate exactly ${numQuestions} multiple-choice 
@@ -147,7 +147,7 @@ quiz questions from the following text.
       const options = [];
       let correctAnswer = "";
       let explanation = "";
-      let difficulty = "medium";
+      let difficulty: DifficultyLevel = "medium";
       for (const line of lines) {
         const trimmed = line.trim();
         if (trimmed.startsWith("Q:")) {
@@ -159,7 +159,7 @@ quiz questions from the following text.
         } else if (trimmed.startsWith("E:")) {
           explanation = trimmed.substring(2).trim();
         } else if (trimmed.startsWith("D:")) {
-          const diff = trimmed.substring(2).trim().toLowerCase();
+          const diff = trimmed.substring(2).trim().toLowerCase() as DifficultyLevel;
           if (["easy", "medium", "hard"].includes(diff)) {
             difficulty = diff;
           }

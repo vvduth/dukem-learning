@@ -16,42 +16,48 @@ export const getDocuments = async (
   next: NextFunction
 ) => {
   try {
-   const documents = await Document.aggregate([
-    {
-      $match: { userId: new mongoose.Types.ObjectId(req.user!._id) }
-    },{
-      $lookup: {
-        from: "flashcards",
-        localField: "_id",
-        foreignField: "documentId",
-        as: "flashcardSets"
-    }},{
-      $lookup: {
-        from: "quizzes",
-        localField: "_id",
-        foreignField: "documentId",
-        as: "quizzes"
-      }
-    },{
-      $addFields: {
-        flashcardCount: { $size: "$flashcardSets" },
-        quizCount: { $size: "$quizzes" }
-      }
-    }, {
-      $project: {
-        extractedText: 0,
-        chunks: 0,
-        flashcardSets: 0,
-        quizzes: 0
-      }
-    },{
-      $sort: { uploadDate: -1 }
-    }
-   ])
+    const documents = await Document.aggregate([
+      {
+        $match: { userId: new mongoose.Types.ObjectId(req.user!._id) },
+      },
+      {
+        $lookup: {
+          from: "flashcards",
+          localField: "_id",
+          foreignField: "documentId",
+          as: "flashcardSets",
+        },
+      },
+      {
+        $lookup: {
+          from: "quizzes",
+          localField: "_id",
+          foreignField: "documentId",
+          as: "quizzes",
+        },
+      },
+      {
+        $addFields: {
+          flashcardCount: { $size: "$flashcardSets" },
+          quizCount: { $size: "$quizzes" },
+        },
+      },
+      {
+        $project: {
+          extractedText: 0,
+          chunks: 0,
+          flashcardSets: 0,
+          quizzes: 0,
+        },
+      },
+      {
+        $sort: { uploadDate: -1 },
+      },
+    ]);
 
-   res.status(200).json({ success: true, data: documents,
-    count : documents.length
-    });
+    res
+      .status(200)
+      .json({ success: true, data: documents, count: documents.length });
   } catch (error) {
     if (req.file) {
       await fs.unlink(req.file.path).catch();
@@ -59,7 +65,6 @@ export const getDocuments = async (
     next(error);
   }
 };
-
 
 /**
  * Get a single document by ID
@@ -73,19 +78,25 @@ export const getDocumentById = async (
     const document = await Document.findOne({
       _id: req.params.id,
       userId: req.user!._id,
-    })
+    });
     if (!document) {
       return res
         .status(404)
-        .json({ success: false, message: "Document not found",
-          statusCode: 404
-         });
+        .json({
+          success: false,
+          message: "Document not found",
+          statusCode: 404,
+        });
     }
     // get counts of the associated flashcards and quizzes
-    const flashcardCount = await FlashCard.countDocuments({ documentId: document._id,
-    userId: req.user!._id });
-    const quizCount = await Quiz.countDocuments({ documentId: document._id,
-    userId: req.user!._id });
+    const flashcardCount = await FlashCard.countDocuments({
+      documentId: document._id,
+      userId: req.user!._id,
+    });
+    const quizCount = await Quiz.countDocuments({
+      documentId: document._id,
+      userId: req.user!._id,
+    });
 
     // update last accessed
     document.lastAccessed = new Date();
@@ -137,31 +148,33 @@ export const uploadDocument = async (
     // create document record
     try {
       const document = await Document.create({
-      userId: req.user._id,
-      title,
-      fileName: req.file.originalname,
-      filePath: fileUrl,
-      fileSize: req.file.size,
-      status: "processing",
-    });
-    // proces in backdground (in production, use a queue like bull)
-    const fileType = req.file.mimetype === 'application/pdf' || req.file.originalname.toLowerCase().endsWith('.pdf') ? 'pdf' : 'markdown';
-    processDocument(document._id, req.file.path, fileType).catch((err: any) => {
-      console.error("Error processing document:", err);
-    });
-console.log("Document record created:", document._id);
-    res.status(201).json({
-      success: true,
-      data: document,
-      message: "Document uploaded successfully. Processing in background.",
-    });
-    
+        userId: req.user._id,
+        title,
+        fileName: req.file.originalname,
+        filePath: fileUrl,
+        fileSize: req.file.size,
+        status: "processing",
+      });
+      // proces in backdground (in production, use a queue like bull)
+      const fileType =
+        req.file.mimetype === "application/pdf" ||
+        req.file.originalname.toLowerCase().endsWith(".pdf")
+          ? "pdf"
+          : "markdown";
+      processDocument(document._id, req.file.path, fileType).catch(
+        (err: any) => {
+          console.error("Error processing document:", err);
+        }
+      );
+      console.log("Document record created:", document._id);
+      res.status(201).json({
+        success: true,
+        data: document,
+        message: "Document uploaded successfully. Processing in background.",
+      });
     } catch (error) {
       console.error("Error creating document record:", error);
     }
-    
-
-    
   } catch (error) {
     next(error);
   }
@@ -171,11 +184,11 @@ console.log("Document record created:", document._id);
 const processDocument = async (
   documentId: mongoose.Types.ObjectId,
   filePath: string,
-  fileType: 'pdf' | 'markdown'
+  fileType: "pdf" | "markdown"
 ) => {
   try {
     let text = "";
-    if (fileType === 'pdf') {
+    if (fileType === "pdf") {
       const result = await extractFromPDF(filePath);
       text = result.text;
     } else {
@@ -189,8 +202,8 @@ const processDocument = async (
     // update document record
     await Document.findByIdAndUpdate(documentId, {
       extractedText: text,
-      chunk: chunks,
-      status: "completed",
+      chunks: chunks,
+      status: "ready",
     });
 
     console.log(`Document ${documentId} processed successfully.`);
@@ -202,7 +215,6 @@ const processDocument = async (
     });
   }
 };
-
 
 /**
  * Update a document by ID
@@ -240,15 +252,16 @@ export const deleteDocument = async (
     const document = await Document.findOne({
       _id: req.params.id,
       userId: req.user!._id,
-    })
-
+    });
 
     if (!document) {
       return res
         .status(404)
-        .json({ success: false, message: "Document not found",
-          statusCode: 404
-         });
+        .json({
+          success: false,
+          message: "Document not found",
+          statusCode: 404,
+        });
     }
 
     // delete associated file
@@ -256,10 +269,9 @@ export const deleteDocument = async (
 
     await document.deleteOne();
 
-    
-    res.status(200).json({ success: true, message: "Document deleted",
-      statusCode: 200
-     });
+    res
+      .status(200)
+      .json({ success: true, message: "Document deleted", statusCode: 200 });
   } catch (error) {
     next(error);
   }
