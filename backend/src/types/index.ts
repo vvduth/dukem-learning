@@ -49,7 +49,7 @@ export interface IUserAnswer {
   questionIndex: number;
   selectedAnswer: string;
   isCorrect: boolean;
-  answerAt: Date;
+  answeredAt: Date;
   _id?: Types.ObjectId;
 }
 

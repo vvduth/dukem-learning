@@ -54,7 +54,7 @@ const quizSchema = new mongoose.Schema<IQuiz>({
             type: Boolean,
             required: true,
         },
-        answerAt: {
+        answeredAt: {
             type: Date,
             default: Date.now,
         }
