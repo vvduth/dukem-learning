@@ -10,7 +10,7 @@ export const protect = async (
    let token;
   try {
     // authentication logic here}
-
+    console.log("Protect Middleware Invoked");
    
 
     // check if token exists in authorization header
@@ -18,6 +18,7 @@ export const protect = async (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
+      console.log("Authorization header found");
       token = req.headers.authorization.split(" ")[1];
 
       // verify token
@@ -35,6 +36,7 @@ export const protect = async (
         });
       }
     }
+    console.log("User authenticated:", req.user?.username);
     next();
   } catch (error:any) {
     console.error("Auth Middleware Error:", error.message);

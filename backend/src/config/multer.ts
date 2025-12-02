@@ -27,17 +27,22 @@ const storage = multer.diskStorage({
 
 // file filter to accept only pdf, md files
 const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    const allowedTypes = ['application/pdf', 'text/markdown'];
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
+    console.log("File MIME type:", file.mimetype);
+    const allowedTypes = ['application/pdf', 'text/markdown', 'text/x-markdown'];
+    if (allowedTypes.includes(file.mimetype) || file.originalname.endsWith('.md')) {
+        console.log("File accepted by filter");
+        return cb(null, true);
     } else {
-        cb(new Error('Only PDF and Markdown files are allowed'));
+        console.log("File rejected by filter");
+        return cb(null, false);
     }
 };
 
 // configure multer
-const upload = multer({ storage, fileFilter , 
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB file size limit
+const upload = multer({ 
+    storage, 
+    fileFilter,
+    limits: { fileSize: 20 * 1024 * 1024 } // 20MB file size limit
 });
 
 export default upload;

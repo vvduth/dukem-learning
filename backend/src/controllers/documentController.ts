@@ -60,33 +60,6 @@ export const getDocuments = async (
   }
 };
 
-// helper function to process PDF
-const processPDF = async (
-  documentId: mongoose.Types.ObjectId,
-  filePath: string
-) => {
-  try {
-    const { text } = await extractFromPDF(filePath);
-
-    // create chunks
-    const chunks = chunkText(text, 500, 50);
-
-    // update document record
-    await Document.findByIdAndUpdate(documentId, {
-      extractedText: text,
-      chunk: chunks,
-      status: "ready",
-    });
-
-    console.log(`Document ${documentId} processed successfully.`);
-  } catch (error) {
-    console.error(`Error processing document ${documentId}:`, error);
-    // update document status to failed
-    await Document.findByIdAndUpdate(documentId, {
-      status: "failed",
-    });
-  }
-};
 
 /**
  * Get a single document by ID
@@ -117,6 +90,7 @@ export const uploadDocument = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("Upload Document Called");
   try {
     if (!req.file) {
       return res
@@ -137,9 +111,11 @@ export const uploadDocument = async (
     // construct the url for the uploaded file
     const baseUrl = `http://localhost:${process.env.PORT || 5000}`;
     const fileUrl = `${baseUrl}/uploads/documents/${req.file.filename}`;
+    console.log("File URL:", fileUrl);
 
     // create document record
-    const document = await Document.create({
+    try {
+      const document = await Document.create({
       userId: req.user._id,
       title,
       fileName: req.file.originalname,
@@ -147,21 +123,56 @@ export const uploadDocument = async (
       fileSize: req.file.size,
       status: "processing",
     });
-
     // proces in backdground (in production, use a queue like bull)
     processPDF(document._id, req.file.path).catch((err: any) => {
       console.error("Error processing PDF:", err);
     });
-
+console.log("Document record created:", document._id);
     res.status(201).json({
       success: true,
       data: document,
       message: "Document uploaded successfully. Processing in background.",
     });
+    
+    } catch (error) {
+      console.error("Error creating document record:", error);
+    }
+    
+
+    
   } catch (error) {
     next(error);
   }
 };
+
+// helper function to process PDF
+const processPDF = async (
+  documentId: mongoose.Types.ObjectId,
+  filePath: string
+) => {
+  try {
+    const { text } = await extractFromPDF(filePath);
+
+    // create chunks
+    const chunks = chunkText(text, 500, 50);
+
+    // update document record
+    await Document.findByIdAndUpdate(documentId, {
+      extractedText: text,
+      chunk: chunks,
+      status: "ready",
+    });
+
+    console.log(`Document ${documentId} processed successfully.`);
+  } catch (error) {
+    console.error(`Error processing document ${documentId}:`, error);
+    // update document status to failed
+    await Document.findByIdAndUpdate(documentId, {
+      status: "failed",
+    });
+  }
+};
+
 
 /**
  * Update a document by ID

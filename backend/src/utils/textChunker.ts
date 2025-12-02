@@ -90,7 +90,9 @@ export const chunkText = (
       currentWordCount += paragraphWordCount;
     }
 
-    // add the last chunk
+    
+  }
+  // add the last chunk
     if (currentChunk.length > 0) {
       chunks.push({
         content: currentChunk.join("\n\n"),
@@ -112,7 +114,6 @@ export const chunkText = (
         if (i + chunkSize >= allWords.length) break;
       }
     }
-  }
   return chunks;
 };
 
