@@ -66,7 +66,7 @@ export interface Quiz {
 export interface FlashCardItem {
   question: string;
   answer: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyLevel
   lastReviewed?: string | null;
   reviewCount: number;
   isStarred: boolean;
@@ -100,6 +100,7 @@ export interface ChatHistory {
 }
 
 // Generic API Response
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ApiResponse<T = any> {
   success: boolean;
   message?: string;
