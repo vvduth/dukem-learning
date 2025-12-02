@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 // Re-exporting types that are shared conceptually, but adapted for Backend (using Date/ObjectId)
-
+export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 export interface IUser {
   _id: Types.ObjectId;
   username: string;
@@ -41,7 +41,7 @@ export interface IQuestion {
   options: string[];
   correctAnswer: string;
   explanation?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyLevel;
   _id?: Types.ObjectId;
 }
 
@@ -70,7 +70,7 @@ export interface IQuiz {
 export interface IFlashCardItem {
   question: string;
   answer: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyLevel;
   lastReviewed?: Date | null;
   reviewCount: number;
   isStarred: boolean;
@@ -102,3 +102,5 @@ export interface IChatHistory {
   createdAt: Date;
   updatedAt: Date;
 }
+
+

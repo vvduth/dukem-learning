@@ -1,3 +1,5 @@
+ export type DifficultyLevel = 'easy' | 'medium' | 'hard';
+
 export interface User {
   _id: string;
   username: string;
@@ -35,7 +37,7 @@ export interface Question {
   options: string[];
   correctAnswer: string;
   explanation?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: DifficultyLevel;
   _id: string;
 }
 

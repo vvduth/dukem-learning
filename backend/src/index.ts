@@ -10,6 +10,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import documentRoutes from "./routes/documentRoute.js";
 import flashcardRoutes from "./routes/flashcardRoute.js";
+import aiRoutes from "./routes/aiRoutes.js";
 // es6 module __dirname alternative
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,6 +48,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes)
 app.use("/api/documents", documentRoutes);
 app.use("/api/flashcards", flashcardRoutes);
+app.use("/api/ai", aiRoutes);
 
 
 // 404 handler
