@@ -17,9 +17,9 @@ import DocumentDetailsPage from "./pages/Documents/DocumentDetailsPage";
 import FlashCardListPage from "./pages/FlashCard/FlashCardListPage";
 import FlashCardPage from "./pages/FlashCard/FlashCardPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import  { useAuth } from "./context/AuthContext";
 const App = () => {
-  const isAuthenticated = false; // Replace with actual authentication logic
-  const loading = false; // Replace with actual loading state
+  const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return (

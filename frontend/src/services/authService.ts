@@ -9,7 +9,7 @@ const login = async (email: string, password: string) => {
       email,
       password,
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw (
       error.response?.data || {
@@ -22,11 +22,11 @@ const login = async (email: string, password: string) => {
 const register = async (name: string, email: string, password: string) => {
   try {
     const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
-      name,
+      username: name,
       email,
       password,
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw (
       error.response?.data || {
