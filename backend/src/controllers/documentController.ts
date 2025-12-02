@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Document from "../models/Document.js";
 import FlashCard from "../models/FlashCard.js";
 import Quiz from "../models/Quiz.js";
-import { extractFromPDF } from "../utils/pdfParser.js";
+import { extractFromPDF, extractFromMarkdown } from "../utils/pdfParser.js";
 import { chunkText } from "../utils/textChunker.js";
 import fs from "fs/promises";
 import mongoose from "mongoose";
@@ -70,13 +70,34 @@ export const getDocumentById = async (
   next: NextFunction
 ) => {
   try {
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findOne({
+      _id: req.params.id,
+      userId: req.user!._id,
+    })
     if (!document) {
       return res
         .status(404)
-        .json({ success: false, message: "Document not found" });
+        .json({ success: false, message: "Document not found",
+          statusCode: 404
+         });
     }
-    res.status(200).json({ success: true, data: document });
+    // get counts of the associated flashcards and quizzes
+    const flashcardCount = await FlashCard.countDocuments({ documentId: document._id,
+    userId: req.user!._id });
+    const quizCount = await Quiz.countDocuments({ documentId: document._id,
+    userId: req.user!._id });
+
+    // update last accessed
+    document.lastAccessed = new Date();
+    await document.save();
+
+    // combine document data with counts
+    const documentData = {
+      ...document.toObject(),
+      flashcardCount,
+      quizCount,
+    };
+    res.status(200).json({ success: true, data: documentData });
   } catch (error) {
     next(error);
   }
@@ -124,8 +145,9 @@ export const uploadDocument = async (
       status: "processing",
     });
     // proces in backdground (in production, use a queue like bull)
-    processPDF(document._id, req.file.path).catch((err: any) => {
-      console.error("Error processing PDF:", err);
+    const fileType = req.file.mimetype === 'application/pdf' || req.file.originalname.toLowerCase().endsWith('.pdf') ? 'pdf' : 'markdown';
+    processDocument(document._id, req.file.path, fileType).catch((err: any) => {
+      console.error("Error processing document:", err);
     });
 console.log("Document record created:", document._id);
     res.status(201).json({
@@ -145,13 +167,21 @@ console.log("Document record created:", document._id);
   }
 };
 
-// helper function to process PDF
-const processPDF = async (
+// helper function to process Document
+const processDocument = async (
   documentId: mongoose.Types.ObjectId,
-  filePath: string
+  filePath: string,
+  fileType: 'pdf' | 'markdown'
 ) => {
   try {
-    const { text } = await extractFromPDF(filePath);
+    let text = "";
+    if (fileType === 'pdf') {
+      const result = await extractFromPDF(filePath);
+      text = result.text;
+    } else {
+      const result = await extractFromMarkdown(filePath);
+      text = result.text;
+    }
 
     // create chunks
     const chunks = chunkText(text, 500, 50);
@@ -160,7 +190,7 @@ const processPDF = async (
     await Document.findByIdAndUpdate(documentId, {
       extractedText: text,
       chunk: chunks,
-      status: "ready",
+      status: "completed",
     });
 
     console.log(`Document ${documentId} processed successfully.`);
@@ -207,13 +237,29 @@ export const deleteDocument = async (
   next: NextFunction
 ) => {
   try {
-    const document = await Document.findByIdAndDelete(req.params.id);
+    const document = await Document.findOne({
+      _id: req.params.id,
+      userId: req.user!._id,
+    })
+
+
     if (!document) {
       return res
         .status(404)
-        .json({ success: false, message: "Document not found" });
+        .json({ success: false, message: "Document not found",
+          statusCode: 404
+         });
     }
-    res.status(200).json({ success: true, message: "Document deleted" });
+
+    // delete associated file
+    await fs.unlink(document.filePath).catch((err) => {});
+
+    await document.deleteOne();
+
+    
+    res.status(200).json({ success: true, message: "Document deleted",
+      statusCode: 200
+     });
   } catch (error) {
     next(error);
   }

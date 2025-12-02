@@ -55,7 +55,7 @@ const documentSchema = new mongoose.Schema<IDocument>(
     },
     status: {
       type: String,
-      enum: ["processing", "completed", "failed"],
+      enum: ["processing", "completed", "failed", "ready"],
       default: "processing",
     },
   },

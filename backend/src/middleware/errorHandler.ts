@@ -33,4 +33,11 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
         statusCode = 401;
         message = "JSON Web Token is invalid. Try again.";
     }
+
+    res.status(statusCode).json({
+        success: false,
+        message,
+        statusCode,
+    });
+    
 }
