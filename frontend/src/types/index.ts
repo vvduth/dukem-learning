@@ -113,3 +113,48 @@ export interface AuthResponse {
   user: User;
   token: string;
 }
+
+
+export interface DashboardOverview {
+  totalDocuments: number;
+  totalFlashCardSets: number;
+  totalFlashCards: number;
+  reviewedFlashCards: number;
+  starredFlashCards: number;
+  totalQuizzes: number;
+  completedQuizzes: number;
+  averageScore: number;
+  studyStreak: number;
+}
+
+export interface DashboardRecentDocument {
+  _id: string;
+  title: string;
+  fileName: string;
+  status: string;
+  lastAccessed: string;
+}
+
+export interface DashboardRecentQuiz {
+  _id: string;
+  title: string;
+  score: number;
+  totalQuestions: number;
+  completedAt: string;
+  lastAttempted?: string;
+}
+
+export interface DashboardRecentActivity {
+  documents: DashboardRecentDocument[];
+  quizzes: DashboardRecentQuiz[];
+}
+
+export interface DashboardData {
+  overview: DashboardOverview;
+  recentActivity: DashboardRecentActivity;
+}
+
+export interface DashboardProgressData {
+  overview: DashboardOverview;
+  recentActivity: DashboardRecentActivity;
+}
