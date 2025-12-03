@@ -9,6 +9,7 @@ import type { ApiResponse, Document } from "../../types";
 import PageHeader from "../../components/common/PageHeader";
 import Tabs from "../../components/common/Tabs";
 import ReactMarkdown from "react-markdown"
+import ChatInterface from "../../components/chat/ChatInterface";
 const DocumentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [document, setDocument] = useState<ApiResponse<Document> | null>(null);
@@ -96,7 +97,9 @@ const DocumentDetailsPage = () => {
     )
   }
   const renderChat = () => {
-    return <div>Chat Feature Coming Soon!</div>;
+    return (
+      <ChatInterface />
+    )
   }
 
   const renderAIActions = () => {

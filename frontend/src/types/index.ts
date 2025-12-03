@@ -88,8 +88,15 @@ export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: string;
+  relevantChunks?: number[];
+  _id?: string;
+}
+
+export interface AIChatResponse {
+  question : string;
+  answer: string;
   relevantChunks: number[];
-  _id: string;
+  chatHistoryId: ChatHistory['_id'];
 }
 
 export interface ChatHistory {

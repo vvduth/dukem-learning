@@ -1,6 +1,7 @@
 
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
+import type { AIChatResponse } from "../types";
 
 export const generateFlashcards = async (
   documentId: string,
@@ -55,7 +56,7 @@ const generateSummary = async (documentId: string) => {
   }
 };
 
-const chat = async (documentId: string, message: string) => {
+const chat = async (documentId: string, message: string) : Promise<AIChatResponse> => {
     try {
         const response = await axiosInstance.post(API_PATHS.AI.CHAT, {
             documentId,

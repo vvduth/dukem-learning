@@ -18,7 +18,7 @@ const Tabs = ({
             <button
               key={tab.name}
               onClick={() => setActiveTab(tab.name)}
-              className={`relative pb-4 px-6 text-sm font-semibold
+              className={`relative pb-4 md:px-6 px-2 text-sm font-semibold
                 transition-all duration-200 ${
                   activeTab === tab.name
                     ? "text-violet-600"

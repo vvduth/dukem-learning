@@ -6,7 +6,7 @@ const Spiner = () => {
         <span className="relative flex h-10 w-10">
             <span className="animate-spin absolute inline-flex h-full w-full rounded-full bg-linear-to-tr
              from-blue-500 via-purple-500 to-pink-500 opacity-30"></span>
-            <span className="relative inline-flex rounded-full h-10 w-10 bg-white"></span>
+            <span className="relative inline-flex rounded-full h-10 w-10"></span>
         </span>
     </div>
   )
