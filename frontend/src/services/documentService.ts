@@ -7,12 +7,8 @@ interface DocumentWithCounts extends Document {
   quizCount: number;
 }
 
-const uploadDocument = async (file: File, title: string): Promise<ApiResponse<Document>> => {
+const uploadDocument = async (formData: FormData): Promise<ApiResponse<Document>> => {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", title);
-
     const response = await axiosInstance.post<ApiResponse<Document>>(
       API_PATHS.DOCUMENTS.UPLOAD,
       formData,
@@ -32,12 +28,12 @@ const uploadDocument = async (file: File, title: string): Promise<ApiResponse<Do
   }
 };
 
-const getDocuments = async (): Promise<ApiResponse<Document[]>> => {
+const getDocuments = async (): Promise<Document[]> => {
   try {
     const response = await axiosInstance.get<ApiResponse<Document[]>>(
       API_PATHS.DOCUMENTS.GET_ALL
     );
-    return response.data;
+    return response.data.data;
   } catch (error: unknown) {
     throw (
       (error as { response?: { data?: unknown } }).response?.data || {
