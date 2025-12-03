@@ -27,9 +27,11 @@ export interface Document {
   chunk: DocumentChunk[];
   uploadDate: string;
   lastAccessed: string;
-  status: 'processing' | 'completed' | 'failed';
+  status: 'processing' | 'completed' | 'failed'| 'ready';
   createdAt: string;
   updatedAt: string;
+  flashcardCount?: number;
+  quizCount?: number;
 }
 
 export interface Question {
