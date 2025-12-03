@@ -2,12 +2,8 @@ import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import type { Document, ApiResponse } from "../types";
 
-interface DocumentWithCounts extends Document {
-  flashcardCount: number;
-  quizCount: number;
-}
 
-const uploadDocument = async (formData: FormData): Promise<ApiResponse<Document>> => {
+const uploadDocument = async (formData: FormData): Promise<Document> => {
   try {
     const response = await axiosInstance.post<ApiResponse<Document>>(
       API_PATHS.DOCUMENTS.UPLOAD,
@@ -18,7 +14,7 @@ const uploadDocument = async (formData: FormData): Promise<ApiResponse<Document>
         },
       }
     );
-    return response.data;
+    return response.data.data;
   } catch (error: unknown) {
     throw (
       (error as { response?: { data?: unknown } }).response?.data || {
@@ -43,9 +39,9 @@ const getDocuments = async (): Promise<Document[]> => {
   }
 };
 
-const getDocumentById = async (id: string): Promise<ApiResponse<DocumentWithCounts>> => {
+const getDocumentById = async (id: string): Promise<ApiResponse<Document>> => {
   try {
-    const response = await axiosInstance.get<ApiResponse<DocumentWithCounts>>(
+    const response = await axiosInstance.get<ApiResponse<Document>>(
       API_PATHS.DOCUMENTS.GET_BY_ID(id)
     );
     return response.data;

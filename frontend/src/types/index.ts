@@ -24,7 +24,7 @@ export interface Document {
   filePath: string;
   fileSize: number;
   extractedText: string;
-  chunk: DocumentChunk[];
+  chunks: DocumentChunk[];
   uploadDate: string;
   lastAccessed: string;
   status: 'processing' | 'completed' | 'failed'| 'ready';

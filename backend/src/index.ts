@@ -37,11 +37,23 @@ app.use(
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "frame-ancestors": ["'self'", "http://localhost:5173"], // Add your frontend dev URL
+      },
+    },
+  })
+);
 app.use(morgan("common"));
 app.use(express.urlencoded({ extended: true }));
 
 // static folder for uploads
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+
 
 // Routes
 app.get("/", (req: Request, res: Response) => {
