@@ -75,7 +75,7 @@ export interface FlashCardItem {
   _id: string;
 }
 
-export interface FlashCard {
+export interface FlashCardSet {
   _id: string;
   userId: string;
   documentId: string;

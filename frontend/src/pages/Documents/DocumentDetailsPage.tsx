@@ -11,6 +11,7 @@ import Tabs from "../../components/common/Tabs";
 import ReactMarkdown from "react-markdown"
 import ChatInterface from "../../components/chat/ChatInterface";
 import AIActions from "../../components/ai/AIActions";
+import FlashCardManager from "../../components/flashcards/FlashCardManager";
 const DocumentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [document, setDocument] = useState<ApiResponse<Document> | null>(null);
@@ -108,7 +109,7 @@ const DocumentDetailsPage = () => {
   }
 
   const renderFlashcards = () => {
-    return <div>Flashcards Feature Coming Soon!</div>;
+    return <FlashCardManager documentId ={id} />
   }
 
   const renderQuizzesTab = () => {
