@@ -9,6 +9,14 @@ const Button = ({
   className = "",
   variant = "primary",
   size = "md",
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  disable?: boolean;
+  className?: string;
+  variant?: "primary" | "secondary" | "outline";
+  size?: "sm" | "md" | "lg";
 }) => {
   const baseStyles = `inline-flex items-center justify-center gap-2 font-semibold 
     rounded-xl transition-all duration-200 active:scale-[0.98] disabled:opacity-50 

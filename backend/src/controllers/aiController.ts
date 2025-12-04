@@ -73,7 +73,7 @@ export const generateQuiz = async (
 ) => {
   try {
     // TODO: Implement quiz generation logic
-    const { documentId, numQuestion = 5, title } = req.body;
+    const { documentId, numQuestions , title } = req.body;
     if (!documentId) {
       return res.status(400).json({
         success: false,
@@ -98,7 +98,7 @@ export const generateQuiz = async (
     // generate quiz using gemini
     const question = await geminiService.generateQuizQuestions(
       document.extractedText,
-      parseInt(numQuestion)
+      parseInt(numQuestions)
     );
 
     // save quiz to database
