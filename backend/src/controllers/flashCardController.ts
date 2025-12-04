@@ -145,7 +145,7 @@ export const deleteFlashCardSet = async (
 ) => {
   try {
     const flashCardSet = await FlashCard.findOne({
-        _id: req.params.id,
+        _id: req.params.setId,
         userId: req.user!._id,
     })
 

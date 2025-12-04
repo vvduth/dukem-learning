@@ -12,6 +12,7 @@ import ReactMarkdown from "react-markdown"
 import ChatInterface from "../../components/chat/ChatInterface";
 import AIActions from "../../components/ai/AIActions";
 import FlashCardManager from "../../components/flashcards/FlashCardManager";
+import QuizManager from "../../components/quizzes/QuizManager";
 const DocumentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [document, setDocument] = useState<ApiResponse<Document> | null>(null);
@@ -113,7 +114,7 @@ const DocumentDetailsPage = () => {
   }
 
   const renderQuizzesTab = () => {
-    return <div>Quizzes Feature Coming Soon!</div>;
+    return <QuizManager documentId={id!} />;
   }
 
   const tabs= [

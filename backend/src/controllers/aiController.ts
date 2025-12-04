@@ -15,7 +15,7 @@ export const generateFlashCards = async (
   console.log("generateFlashCards called with body:", req.body);
   try {
     // TODO: Implement flashcard generation logic
-    const { documentId, count = 5 } = req.body;
+    const { documentId, count = 10 } = req.body;
     if (!documentId) {
       return res
         .status(400)

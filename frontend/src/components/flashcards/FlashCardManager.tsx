@@ -98,15 +98,52 @@ const FlashCardManager = ({
     }
   };
 
-  const handleToggleStar = async (cardId: string) => {};
+  const handleToggleStar = async (cardId: string) => {
+    try {
+      await flashcardService.toggleStarFlashCard(cardId);
+      const updatedSets = flashCardSets.map((set) => {
+        if (set._id === selectedSet?._id) {
+          const updatedCards = set.cards.map((card) => 
+            card._id === cardId ? { ...card, isStarred: !card.isStarred } : card
+          ) ;
+
+          return { ...set, cards: updatedCards }
+        }
+        return set;
+      })
+      setFlashCardSets(updatedSets);
+      setSelectedSet(updatedSets.find((set) => set._id === selectedSet?._id) || null);
+      toast.success("Flashcard star status updated.");
+      fetchFlashCardSets();
+    } catch (error) {
+      toast.error(error.message || "Failed to toggle star status.");
+      console.error(error);
+    }
+  };
 
   const handleDeleteRequest = (e: React.MouseEvent, set: FlashCardSet) => {
     e.stopPropagation();
+    console.log("set to delete:", set);
     setSetToDelete(set);
     setIsdeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = async () => {};
+  const handleConfirmDelete = async () => {
+    if (!setToDelete) return;
+    setDeleting(true);
+    try {
+      await flashcardService.deleteFlashCardSet(setToDelete._id);
+      toast.success("Flashcard set deleted.");
+      setIsdeleteModalOpen(false);
+      setSetToDelete(null);
+      fetchFlashCardSets();
+    } catch (error) {
+      toast.error(error.message || "Failed to delete flashcard set.");
+      console.error(error);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const handleSelectSet = (set: FlashCardSet) => {
     setSelectedSet(set);
@@ -118,7 +155,68 @@ const FlashCardManager = ({
   };
 
   const renderFlashCardViewer = () => {
-    return "FlashCard Viewer Details";
+    const currentCard = selectedSet?.cards[currentCardIndex];
+    return (
+      <div className="space-y-8">
+        {/* go back button */}
+        <button
+          onClick={() => setSelectedSet(null)}
+          className="group inline-flex items-center gap-2 text-sm text-slate-600 font-medium
+          hover:text-violet-600 transition-colors duration-200"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1
+          transition-transform duration-200" strokeWidth={2}  />
+          Back to sets
+        </button>
+        {/* flashcard display */}
+        <div className="flex flex-col items-center space-y-8">
+          <div className="w-full max-w-2xl">
+            <FlashCardComponent flashCard={currentCard} 
+              onToggleStar={handleToggleStar}
+            />
+          </div>
+
+          {/* navigation controls */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={handlePrevCard}
+              disabled={!selectedSet || selectedSet.cards.length <= 1}
+              className="group flex items-center gap-2 px-5 h-11 bg-slate-100
+              hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl
+              transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+              disabled:hover:bg-slate-100"
+            >
+                <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5
+                transition-transform duration-200"
+                strokeWidth={2.5}
+                />
+                Previous
+            </button>
+            <div className="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200">
+              <span className="text-sm font-semibold text-slate-700">
+                {currentCardIndex + 1} {" "}
+                <span className="text-slate-400 font-normal">/</span>
+                {" "} {selectedSet?.cards.length}
+              </span>
+            </div>
+            <button
+              onClick={handleNextCard}
+              disabled={!selectedSet || selectedSet.cards.length <= 1}
+               className="group flex items-center gap-2 px-5 h-11 bg-slate-100
+              hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl
+              transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+              disabled:hover:bg-slate-100"
+            >
+              Next
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5
+                transition-transform duration-200"
+                strokeWidth={2.5}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   };
 
   const renderSetList = () => {
