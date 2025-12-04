@@ -51,10 +51,16 @@ export interface UserAnswer {
   _id: string;
 }
 
+export interface DocumentInfoInQuiz {
+  _id: string;
+  title: string;
+  fileName: string;
+}
+
 export interface Quiz {
   _id: string;
   userId: string;
-  documentId: string;
+  documentId: DocumentInfoInQuiz;
   title: string;
   questions: Question[];
   userAnswers: UserAnswer[];

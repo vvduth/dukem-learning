@@ -4,11 +4,14 @@ import { API_PATHS } from "../utils/apiPaths";
 import type { AIChatResponse, AIExplanationResponse } from "../types";
 
 export const generateFlashcards = async (
-  documentId: string
+  documentId: string,
+  {numQuestions, title}: {numQuestions: number, title?: string}
 ) => {
   try {
     const reponse = await axiosInstance.post(API_PATHS.AI.GENERATE_FLASHCARDS, {
       documentId,
+      numQuestions,
+      title,
     });
     return reponse.data;
   } catch (error) {
