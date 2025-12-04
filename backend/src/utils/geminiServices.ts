@@ -34,6 +34,7 @@ export const generateFlashcards = async (
   }>
 > => {
   const prompt = `Generate exactly ${count} flashcards from the following text.
+  Do not be lazy and ensure each flashcard is unique and covers different aspects of the content.
     Format each flashcard as:
     Q: [Clear, specific, and concise question]
     A: [Accurate and concise answer]

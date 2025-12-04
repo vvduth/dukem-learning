@@ -43,6 +43,7 @@ export interface IQuestion {
   explanation?: string;
   difficulty: DifficultyLevel;
   _id?: Types.ObjectId;
+  explaination?: string;
 }
 
 export interface IUserAnswer {

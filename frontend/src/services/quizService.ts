@@ -1,13 +1,13 @@
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
-import type { Quiz, ApiResponse } from "../types";
+import type { Quiz, ApiResponse, Document } from "../types";
 
-interface QuizAnswer {
+export interface QuizAnswer {
   questionIndex: number;
   selectedAnswer: string;
 }
 
-interface QuizSubmitResponse {
+export interface QuizSubmitResponse {
   quizId: string;
   score: number;
   correctCount: number;
@@ -21,7 +21,7 @@ interface QuizSubmitResponse {
   }>;
 }
 
-interface QuizResultDetail {
+export interface QuizResultDetail {
   questionIndex: number;
   question: string;
   options: string[];
@@ -31,16 +31,17 @@ interface QuizResultDetail {
   isCorrect: boolean;
 }
 
-interface QuizResultResponse {
+export interface QuizResultResponse {
   quiz: {
     id: string;
     title: string;
-    document: unknown;
+    document: Document;
     score: number;
     totalQuestions: number;
     completedAt: string;
   };
   results: QuizResultDetail[];
+  explanation?: string;
 }
 
 const getQuizzesByDocument = async (documentId: string): Promise<ApiResponse<Quiz[]>> => {

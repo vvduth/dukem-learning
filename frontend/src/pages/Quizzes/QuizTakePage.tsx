@@ -56,7 +56,18 @@ const QuizTakePage = () => {
   const handleSubmitQuiz = async () => {
     setSubmitting(true);
     try {
-      //const formattedAnswers = Object.keys
+      const formattedAnswers = Object.keys(selectedAnswers).map((questionId) => {
+        const question = quiz?.questions.find((q) => q._id === questionId);
+        const questionIndex = quiz?.questions.findIndex((q) => q._id === questionId);
+        const optionIndex = selectedAnswers[questionId];
+        const selectedAnswer =  question?.options[optionIndex];
+        return {
+          questionIndex, selectedAnswer
+        }
+      })
+      await quizService.submitQuiz(quizId!, formattedAnswers);
+      toast.success("Quiz submitted successfully!");
+      navigate(`/quizzes/${quizId}/result`);
     } catch (error) {
       toast.error("Failed to submit quiz. Please try again.");
       console.error("Error submitting quiz:", error);
