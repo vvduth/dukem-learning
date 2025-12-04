@@ -10,6 +10,7 @@ import PageHeader from "../../components/common/PageHeader";
 import Tabs from "../../components/common/Tabs";
 import ReactMarkdown from "react-markdown"
 import ChatInterface from "../../components/chat/ChatInterface";
+import AIActions from "../../components/ai/AIActions";
 const DocumentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [document, setDocument] = useState<ApiResponse<Document> | null>(null);
@@ -103,7 +104,7 @@ const DocumentDetailsPage = () => {
   }
 
   const renderAIActions = () => {
-    return <div>AI Actions Coming Soon!</div>;
+    return <AIActions />;
   }
 
   const renderFlashcards = () => {

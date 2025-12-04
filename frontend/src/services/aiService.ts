@@ -1,7 +1,7 @@
 
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
-import type { AIChatResponse } from "../types";
+import type { AIChatResponse, AIExplanationResponse } from "../types";
 
 export const generateFlashcards = async (
   documentId: string,
@@ -46,7 +46,7 @@ const generateSummary = async (documentId: string) => {
     const response = await axiosInstance.post(API_PATHS.AI.GENERATE_SUMMARY, {
       documentId,
     });
-    return response.data?.data;
+    return response.data?.data as string;
   } catch (error) {
     throw (
       error.response?.data || {
@@ -78,7 +78,7 @@ const explainConcept = async (documentId: string, concept: string) => {
             documentId,
             concept,
         });
-        return response.data?.data;
+        return response.data?.data as AIExplanationResponse;
     } catch (error) {
         throw (
             error.response?.data || {

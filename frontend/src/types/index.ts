@@ -99,6 +99,12 @@ export interface AIChatResponse {
   chatHistoryId: ChatHistory['_id'];
 }
 
+export interface AIExplanationResponse {
+  concept: string;
+  explanation: string;
+  relevantChunks: number[];
+}
+
 export interface ChatHistory {
   _id: string;
   userId: string;
