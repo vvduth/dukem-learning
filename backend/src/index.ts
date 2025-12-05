@@ -42,7 +42,10 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "frame-ancestors": ["'self'", "http://localhost:5173"], // Add your frontend dev URL
+        "frame-ancestors": ["'self'", "http://localhost:5173",
+          "http://localhost",        // Docker nginx (port 80)
+        "http://localhost:80" 
+        ], // Add your frontend dev URL
       },
     },
   })
