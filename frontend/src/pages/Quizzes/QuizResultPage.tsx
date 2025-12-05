@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import quizService, {
   type QuizResultResponse,
@@ -117,7 +117,7 @@ const QuizResultPage = () => {
               Your score
             </p>
             <div
-              className={`inline-block text-5xl font-bold bg-linear-to-r ${getScoreColor(
+              className={`inline-block text-5xl  text-white rounded-2xl p-2 font-bold bg-linear-to-r ${getScoreColor(
                 score
               )}`}
             >

@@ -64,7 +64,7 @@ const QuizCard = ({
       {/* action button */}
       <div className="mt-2 pt-4 border-t border-slate-100">
         {quiz?.userAnswers?.length > 0 ? (
-          <Link to={`/quizzes/${quiz._id}/results`}>
+          <Link to={`/quizzes/${quiz._id}/result`}>
             <button className="group/btn w-full inline-flex items-center justify-center gap-2 h-11
             bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl
             transition-all duration-200 active:scale-95 cursor-pointer">

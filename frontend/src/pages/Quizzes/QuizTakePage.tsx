@@ -69,7 +69,7 @@ const QuizTakePage = () => {
       toast.success("Quiz submitted successfully!");
       navigate(`/quizzes/${quizId}/result`);
     } catch (error) {
-      toast.error("Failed to submit quiz. Please try again.");
+      toast.error(error.message ||  "Failed to submit quiz. Please try again.");
       console.error("Error submitting quiz:", error);
     } finally {
       setSubmitting(false);
