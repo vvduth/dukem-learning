@@ -42,8 +42,11 @@ const DocumentDetailsPage = () => {
     if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
       return filePath;
     }
-    const baseUrl =  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
-    return `${baseUrl}/${filePath.startsWith("/") ? '': '/'}${filePath}`;
+    // const baseUrl =  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+    // return `${baseUrl}/${filePath.startsWith("/") ? '': '/'}${filePath}`;
+    
+    const cleanPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
+    return `/${cleanPath}`;
   };
 
   const renderContent = () => {
