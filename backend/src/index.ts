@@ -5,7 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { connectDB } from "./config/db.js";
-import authRoutes from "./routes/authRoute.js"
+import authRoutes from "./routes/authRoute.js";
 import helmet from "helmet";
 import morgan from "morgan";
 import documentRoutes from "./routes/documentRoute.js";
@@ -42,9 +42,16 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "frame-ancestors": ["'self'", "http://localhost:5173",
-          "http://localhost",        // Docker nginx (port 80)
-        "http://localhost:80" 
+        "frame-ancestors": [
+          "'self'",
+          "http://localhost:5173",
+          "http://localhost", // Docker nginx (port 80)
+          "http://localhost:80",
+          "http://localhost:80",
+          "http://dukem-learning.xyz",
+          "https://dukem-learning.xyz",
+          "https://www.dukem-learning.xyz",
+          "http://www.dukem-learning.xyz",
         ], // Add your frontend dev URL
       },
     },
@@ -56,13 +63,11 @@ app.use(express.urlencoded({ extended: true }));
 // static folder for uploads
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-
-
 // Routes
 app.get("/", (req: Request, res: Response) => {
   res.send("API is running...");
 });
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/flashcards", flashcardRoutes);
 app.use("/api/ai", aiRoutes);
@@ -78,7 +83,7 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
