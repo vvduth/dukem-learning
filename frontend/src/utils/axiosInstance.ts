@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
-import { BASE_URL } from "./apiPaths";
+
 
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
