@@ -81,10 +81,14 @@ export interface FlashCardItem {
   _id: string;
 }
 
+export interface DocumentInfoInFlashCardSet {
+  _id: string;
+  title: string;
+}
 export interface FlashCardSet {
   _id: string;
   userId: string;
-  documentId: string;
+  documentId: DocumentInfoInFlashCardSet ;
   cards: FlashCardItem[];
   createdAt: string;
   updatedAt: string;
