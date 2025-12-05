@@ -135,6 +135,12 @@ const DocumentDetailsPage = () => {
   if (!document) {
     return <div className="text-center p-8">No document found.</div>;
   }
+
+  if (document.data.status !== "ready") {
+    return <div className="text-center p-8">
+      Document is being processed. Please check back later.
+    </div>;
+  }
   return <div>
     <div className="mb-4">
       <Link to="/documents" className="inline-flex items-center gap-2

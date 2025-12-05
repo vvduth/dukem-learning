@@ -32,7 +32,7 @@ export const extractFromBuffer = async (
 
 
 // Updated to use the buffer function
-export const extractFromPDF = async (
+export const extractFromPDFS3 = async (
   filePath: string
 ): Promise<{ text: string; numPages: number; info: any }> => {
   try {
