@@ -156,9 +156,11 @@ export const uploadDocument = async (
         .status(400)
         .json({ success: false, message: "No file uploaded", statusCode: 400 });
     }
+    
 
     // multer s3 add locationa and key to req.file
     const file = req.file as Express.MulterS3.File;
+    
     const { title } = req.body;
     if (!title || title.trim() === "") {
       // delete from s3 if no title
@@ -184,6 +186,7 @@ export const uploadDocument = async (
         title,
         fileName: file.originalname,
         filePath: file.location,
+        s3Key: file.key,
         fileSize: file.size,
         status: "processing",
       });
@@ -193,7 +196,7 @@ export const uploadDocument = async (
         req.file.originalname.toLowerCase().endsWith(".pdf")
           ? "pdf"
           : "markdown";
-      processDocument(document._id, req.file.path, fileType).catch(
+      processDocument(document._id, file.key, fileType).catch(
         (err: any) => {
           console.error("Error processing document:", err);
         }

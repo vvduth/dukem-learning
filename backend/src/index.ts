@@ -34,7 +34,21 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+app.use((req, res, next) => {
+  const contentType = req.get('content-type') || '';
+  if (contentType.startsWith('multipart/form-data')) {
+    return next();
+  }
+  express.json({ limit: '50mb' })(req, res, next);
+});
+
+app.use((req, res, next) => {
+  const contentType = req.get('content-type') || '';
+  if (contentType.startsWith('multipart/form-data')) {
+    return next();
+  }
+  express.urlencoded({ extended: true, limit: '50mb' })(req, res, next);
+});
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(
@@ -58,7 +72,7 @@ app.use(
   })
 );
 app.use(morgan("common"));
-app.use(express.urlencoded({ extended: true }));
+
 
 // static folder for uploads
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));

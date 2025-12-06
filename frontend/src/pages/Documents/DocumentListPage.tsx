@@ -52,6 +52,9 @@ const DocumentListPage = () => {
       toast.error("Please select a file and enter a title.");
       return;
     }
+
+    console.log("Uploading file:", uploadFile); // Check file object
+  console.log("File size:", uploadFile.size); // Check file size
     setUploading(true);
     const formData = new FormData();
     formData.append("file", uploadFile);

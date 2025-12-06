@@ -15,6 +15,7 @@ import moment from "moment";
 // helper function to format gile size
 const formatFileSize = (bytes: number) => {
   if (bytes === undefined || bytes === null) return "N/A";
+  if (bytes === 0) return "Really big";
   const units = ["B", "KB", "MB", "GB", "TB"];
   let size = bytes;
   let unitIndex = 0;
@@ -24,8 +25,9 @@ const formatFileSize = (bytes: number) => {
     unitIndex++;
   }
 
-  return `${size.toFixed(1)} ${units[unitIndex]}`;
+  return `${size} ${units[unitIndex]}` ;
 };
+
 
 const DocumentCard = ({
   document,
@@ -44,6 +46,8 @@ const DocumentCard = ({
     e.stopPropagation();
     onDelete(document);
   };
+
+    
 
   return (
     <div
@@ -84,7 +88,7 @@ const DocumentCard = ({
           {document.fileSize !== undefined && (
             <>
               <span className="font-medium">
-                {formatFileSize(document.fileSize)}
+                 {formatFileSize(document.fileSize)} 
               </span>
             </>
           )}
