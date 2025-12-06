@@ -26,6 +26,7 @@ export interface IDocument {
   title: string;
   fileName: string;
   filePath: string;
+  s3Key?: string;
   fileSize: number;
   extractedText: string;
   chunks: IDocumentChunk[];

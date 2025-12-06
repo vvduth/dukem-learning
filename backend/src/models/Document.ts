@@ -21,6 +21,9 @@ const documentSchema = new mongoose.Schema<IDocument>(
       type: String,
       required: [true, "File path is required"],
     },
+    s3Key: {
+      type: String,
+    },
     fileSize: {
       type: Number,
       required: true,
